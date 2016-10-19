@@ -23,7 +23,8 @@ defmodule Shopify.Resource do
       end
 
       def all(session, query \\ []) do
-        collection(session, query) |> Enum.to_list
+        records = collection(session, query) |> Enum.to_list
+        {:ok, records}
       end
 
       if :find in import_functions do
@@ -66,8 +67,8 @@ defmodule Shopify.Resource do
   defp do_reduce(col, {:cont, acc}, fun) do
     {col, item} = next_item(col)
 
-    if is_nil(item) do
-      {:done, acc}
+    if col.done do
+      {:done, acc ++ item}
     else
       do_reduce(col, fun.(item, acc), fun)
     end
@@ -82,7 +83,7 @@ defmodule Shopify.Resource do
         {col, items} = fetch_next_page(col)
 
         if (col.done) do
-          {col, nil}
+          {col, items}
         else
           [next | rem] = items
           col = %__MODULE__{col| remaining: rem}
@@ -91,11 +92,11 @@ defmodule Shopify.Resource do
     end
   end
 
-  #TODO: Check to see if page items < limit, if so, done early
   defp fetch_next_page(col) do
     url = "/#{col.module.plural_resource}.json"
     {:ok, response} = Request.get(col.session, url, col.query ++ [page: col.page])
-    done = Enum.count(response.body[col.module.plural_resource]) == 0
+    response_count = Enum.count(response.body[col.module.plural_resource])
+    done = response_count == 0 || response_count < 250
     col = %__MODULE__{col|page: col.page + 1, done: done}
     {col, response.body[col.module.plural_resource]}
   end

@@ -13,9 +13,8 @@ defmodule Shopify.Request do
 
   def post(token, url_, data, header \\ [], opts \\ []) do
     headers = req_headers(token, header)
-    |> req_post_headers
+              |> req_post_headers
     url = prepare_url(token, url_)
-    payload = Poison.Encoder.encode(data, [])
 
     case apply(OAuth2.Request, :post, [url, data, headers, opts]) do
       {:ok, response} -> {:ok, response.body}
@@ -25,9 +24,8 @@ defmodule Shopify.Request do
 
   def put(token, url_, data, header \\ [], opts \\ []) do
     headers = req_headers(token, header)
-    |> req_post_headers
+              |> req_post_headers
     url = prepare_url(token, url_)
-    payload = Poison.Encoder.encode(data, [])
 
     case apply(OAuth2.Request, :put, [url, data, headers, opts]) do
       {:ok, response} -> {:ok, response.body}
@@ -35,6 +33,8 @@ defmodule Shopify.Request do
     end
   end
 
+  # TODO: this function will need to accept an OAuth2.Client struct
+  # starting with oauth2 0.7.0
   defp prepare_url(token, url_) do
     case String.downcase(url_) do
       <<"http://":: utf8, _::binary>> -> url_
