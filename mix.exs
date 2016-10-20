@@ -30,8 +30,9 @@ defmodule Shopify.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:oauth2, "~> 0.5.0"},
-      {:bypass, "~> 0.1", only: :test},
+      {:bypass, git: "https://github.com/pspdfkit-labs/bypass.git", only: :test},
+      {:oauth2, "~> 0.8.0"},
+      {:poison, "~> 3.0.0", only: :test},
     ]
   end
 end

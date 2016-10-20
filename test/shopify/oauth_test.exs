@@ -34,10 +34,10 @@ defmodule Shopify.OauthTest do
   # NOTE: as of oauth2 0.7.0, this function will return
   # an OAuth2.Client struct with a token member.
   # Be Ready!
-  test "get_token/2 returns an AccessToken", %{bypass: bypass} do
+  test "get_token/2 returns a Client", %{bypass: bypass} do
     shopid = "spatula-city"
     faux_token = "abcd1234"
-    token_map = %{access_token: faux_token}
+    token_map = %{"access_token" => faux_token}
     token_json_string = Poison.Encoder.encode(token_map, []) |> to_string
     options = [code: "wxyz9876"]
     Bypass.expect bypass, fn conn ->
@@ -47,7 +47,7 @@ defmodule Shopify.OauthTest do
       |> Plug.Conn.send_resp(200, token_json_string)
     end
 
-    %OAuth2.AccessToken{access_token: token} = Oauth.get_token!(shopid, options)
+    %OAuth2.Client{token: %OAuth2.AccessToken{access_token: token}} = Oauth.get_token!(shopid, options)
     assert token == faux_token
   end
 
