@@ -5,15 +5,16 @@ defmodule Shopify.Oauth do
   # Public API
   def create(shopid, options \\ []) do
     secrets = Application.get_all_env(:shopify)
+    oauth_base = secrets[:oauth_site] || "https://#{shopid}.myshopify.com/admin"
 
     OAuth2.Client.new([
       strategy: __MODULE__,
       client_id: secrets[:api_key],
       client_secret: secrets[:secret],
       redirect_uri: options[:redirect_uri],
-      site: "https://#{shopid}.myshopify.com/admin",
-      authorize_url: "https://#{shopid}.myshopify.com/admin/oauth/authorize",
-      token_url: "https://#{shopid}.myshopify.com/admin/oauth/access_token"
+      site: oauth_base,
+      authorize_url: "#{oauth_base}/oauth/authorize",
+      token_url: "#{oauth_base}/oauth/access_token"
     ])
   end
 

@@ -16,7 +16,7 @@ defmodule Shopify.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :oauth2]]
   end
 
   # Dependencies can be Hex packages:
@@ -31,6 +31,7 @@ defmodule Shopify.Mixfile do
   defp deps do
     [
       {:oauth2, "~> 0.5.0"},
+      {:bypass, "~> 0.1", only: :test},
     ]
   end
 end
