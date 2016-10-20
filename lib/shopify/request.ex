@@ -34,8 +34,17 @@ defmodule Shopify.Request do
     end
   end
 
-  # TODO: this function will need to accept an OAuth2.Client struct
-  # starting with oauth2 0.7.0
+  def delete(client, url_, data \\ "", header \\ [], opts \\ []) do
+    headers = req_headers(client.token, header)
+              |> req_post_headers
+    url = prepare_url(client, url_)
+
+    case apply(OAuth2.Client, :delete, [client, url, data, headers, opts]) do
+      {:ok, response} -> {:ok, response.body}
+      {:error, error} -> {:error, error}
+    end
+  end
+
   defp prepare_url(client, url_) do
     case String.downcase(url_) do
       <<"http://":: utf8, _::binary>> -> url_

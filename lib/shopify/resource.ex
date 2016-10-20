@@ -42,6 +42,19 @@ defmodule Shopify.Resource do
           def update(session, id, params), do: Api.update(session, __MODULE__, id, params)
         end
       end
+
+      if :create in import_functions do
+        def create(session, params), do: Api.create(session, __MODULE__, params)
+      end
+
+      if :delete in import_functions do
+        if singleton do
+          def delete(session), do: Api.delete(session, __MODULE__)
+        else
+          def delete(session, id), do: Api.delete(session, __MODULE__, id)
+        end
+      end
+
     end
   end
 
