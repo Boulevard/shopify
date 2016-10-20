@@ -1,5 +1,7 @@
 # Shopify
 
+[![Build Status](https://semaphoreci.com/api/v1/boulevard/shopify/branches/master/badge.svg)](https://semaphoreci.com/boulevard/shopify)
+
 An Elixir client for the Shopify API.  Currently under development.
 
 Todo:
