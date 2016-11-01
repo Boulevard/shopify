@@ -52,7 +52,7 @@ Todo:
 | Theme |   |
 | Transaction |   |
 | User |   |
-| Webhook |   |
+| Webhook | ✓ |
 
 
 ## Installation
