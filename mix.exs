@@ -32,7 +32,7 @@ defmodule Shopify.Mixfile do
     [
       {:bypass, git: "https://github.com/pspdfkit-labs/bypass.git", only: :test},
       {:oauth2, "~> 0.8.0"},
-      {:poison, "~> 3.0.0", only: :test},
+      {:poison, "~> 3.0.0"},
     ]
   end
 end
