@@ -15,6 +15,14 @@ defmodule Shopify.OauthTest do
     assert strategy == Shopify.Oauth
   end
 
+  test "create/2 sets the token directly from secrets" do
+    shopid = "spatula-city"
+    token = "abcd1234567890"
+    %OAuth2.Client{token: access_token} = Oauth.create(shopid, token: token)
+
+    assert access_token == %OAuth2.AccessToken{token_type: "Bearer", access_token: token}
+  end
+
   test "authorize_url!/2 returns a URL", %{bypass: bypass} do
     shopid = "spatula-city"
     scopes = "read_widgets"
@@ -22,7 +30,7 @@ defmodule Shopify.OauthTest do
     options = %{shopid: shopid, scope: scopes, redirect_uri: redirect_uri}
     auth_url = Shopify.Oauth.authorize_url!(shopid, options)
     expected_params = %{
-      client_id: nil,
+      client_id: "abcd1234",
       redirect_uri: redirect_uri,
       response_type: "code",
       scope: scopes,
