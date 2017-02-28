@@ -7,15 +7,23 @@ defmodule Shopify.Oauth do
     secrets = Application.get_all_env(:shopify)
     oauth_base = secrets[:oauth_site] || "https://#{shopid}.myshopify.com/admin"
 
-    OAuth2.Client.new([
+    client = OAuth2.Client.new([
       strategy: __MODULE__,
       client_id: secrets[:api_key],
       client_secret: secrets[:secret],
       redirect_uri: options[:redirect_uri],
       site: oauth_base,
       authorize_url: "#{oauth_base}/oauth/authorize",
-      token_url: "#{oauth_base}/oauth/access_token"
+      token_url: "#{oauth_base}/oauth/access_token",
     ])
+
+    if options[:token] do
+      client
+      |> Map.put(:token, %OAuth2.AccessToken{token_type: "Bearer", access_token: options[:token]})
+    else
+      client
+    end
+
   end
 
   def authorize_url!(shopid, params \\ []) do
