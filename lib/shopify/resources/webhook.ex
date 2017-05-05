@@ -5,6 +5,8 @@ defmodule Shopify.Webhook do
   @singular "webhook"
   @plural "webhooks"
 
+  alias Shopify.Config
+
   def authenticate_callback(hmac, body) do
     case digest = compute_digest(body) do
       ^hmac -> {:ok, digest}
@@ -13,8 +15,7 @@ defmodule Shopify.Webhook do
   end
 
   def compute_digest(data) do
-    secret = Application.get_env(:shopify, :secret)
-    :crypto.hmac(:sha256, secret, data)
+    :crypto.hmac(:sha256, Config.get(:secret), data)
     |> Base.encode64
     |> String.strip
   end
