@@ -4,9 +4,38 @@
 
 An Elixir client for the Shopify API.  Currently under development.
 
-Todo:
- * More resources
- * More tests
+## Installation
+
+```
+1. Add shopify to your list of dependencies in `mix.exs`:
+
+      def deps do
+        [{:shopify, github: "Boulevard/shopify"}]
+      end
+
+2. Ensure shopify is started before your application:
+
+      def application do
+        [applications: [:shopify]]
+      end
+```
+
+### Configuration
+
+The following environment variables must be set:
+
+* `SHOPIFY_SECRET`
+* `SHOPIFY_REFRESH_TOKEN`
+* `SHOPIFY_API_KEY`
+
+These may be configured as strings during compile-time, or you may provide the `{:system, "VARNAME"}` format.
+
+```elixir
+config :shopify,
+  secret: {:system, "SHOPIFY_SECRET"},
+  refresh_token: {:system, "SHOPIFY_REFRESH_TOKEN"},
+  api_key: {:system, "SHOPIFY_API_KEY"}
+```
 
 ### Resources
 
@@ -53,18 +82,3 @@ Todo:
 | Transaction |   |
 | User |   |
 | Webhook | ✓ |
-
-
-## Installation
-
-  1. Add shopify to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:shopify, github: "Boulevard/shopify"}]
-        end
-
-  2. Ensure shopify is started before your application:
-
-        def application do
-          [applications: [:shopify]]
-        end

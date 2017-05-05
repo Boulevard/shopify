@@ -2,16 +2,17 @@ defmodule Shopify.Oauth do
   use OAuth2.Strategy
   alias OAuth2.Strategy.AuthCode
 
+  alias Shopify.Config
+
   # Public API
   def create(shopid, options \\ []) do
-    secrets = Application.get_all_env(:shopify)
-    oauth_base = secrets[:oauth_site] || "https://#{shopid}.myshopify.com/admin"
+    oauth_base = Config.get(:oauth_site) || "https://#{shopid}.myshopify.com/admin"
 
     client = OAuth2.Client.new([
       strategy: __MODULE__,
-      client_id: secrets[:api_key],
-      client_secret: secrets[:secret],
-      redirect_uri: options[:redirect_uri],
+      client_id: Config.get(:api_key),
+      client_secret: Config.get(:secret),
+      redirect_uri: Config.get(:redirect_uri),
       site: oauth_base,
       authorize_url: "#{oauth_base}/oauth/authorize",
       token_url: "#{oauth_base}/oauth/access_token",
@@ -23,7 +24,6 @@ defmodule Shopify.Oauth do
     else
       client
     end
-
   end
 
   def authorize_url!(shopid, params \\ []) do
