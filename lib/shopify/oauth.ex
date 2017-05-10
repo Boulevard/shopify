@@ -12,7 +12,8 @@ defmodule Shopify.Oauth do
       strategy: __MODULE__,
       client_id: Config.get(:api_key),
       client_secret: Config.get(:secret),
-      redirect_uri: Config.get(:redirect_uri),
+      redirect_uri: Keyword.get(options, :redirect_uri, Config.get(:redirect_uri)),
+      token: Keyword.get(options, :token),
       site: oauth_base,
       authorize_url: "#{oauth_base}/oauth/authorize",
       token_url: "#{oauth_base}/oauth/access_token",
@@ -28,13 +29,17 @@ defmodule Shopify.Oauth do
 
   def authorize_url!(shopid, params \\ []) do
     shopid
-      |> create()
-      |> OAuth2.Client.put_param(:scope, "read_products,write_products")
-      |> OAuth2.Client.authorize_url!(params)
+    |> create()
+    |> OAuth2.Client.put_param(:scope, "read_products,write_products")
+    |> OAuth2.Client.authorize_url!(params)
   end
 
   def get_token!(shopid, options \\ []) do
-    OAuth2.Client.get_token!(create(shopid, options), options)
+    shopid
+    |> create(options)
+    |> put_param(:client_secret, Config.get(:secret))
+    |> put_header("accept", "application/json")
+    |> OAuth2.Client.get_token!(options)
   end
 
   # Strategy Callbacks
