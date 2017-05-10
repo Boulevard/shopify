@@ -4,7 +4,7 @@ defmodule Shopify.Config do
 
   def get(key) do
     case Application.get_env(@otp_app, key) do
-      {:system, varname} when is_binary(key) -> System.get_env(varname)
+      {:system, varname} when is_binary(varname) -> System.get_env(varname)
       value -> value
     end
   end
