@@ -30,7 +30,7 @@ defmodule Shopify.Oauth do
   def authorize_url!(shopid, params \\ []) do
     shopid
     |> create()
-    |> OAuth2.Client.put_param(:scope, "read_products,write_products")
+    |> OAuth2.Client.put_param(:scope, "read_products,write_products,read_orders,write_orders")
     |> OAuth2.Client.authorize_url!(params)
   end
 
