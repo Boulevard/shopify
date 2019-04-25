@@ -78,7 +78,7 @@ defmodule Shopify.WebhookTest do
 
   def callback_body do
     {:ok, body} = File.read("test/fixtures/callback_body.json")
-    body |> String.strip
+    body |> String.trim
   end
 
 end
