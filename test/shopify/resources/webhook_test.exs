@@ -34,11 +34,6 @@ defmodule Shopify.WebhookTest do
   test "Webhook.delete destroys the webhook", %{bypass: bypass} do
     resource_module = Webhook
     resource_id = "1337"
-    resource_map = %{
-      "topic" => "customers/create",
-      "address" => "https://pen-island.com/callback",
-      "format" => "json",
-    }
     token = %OAuth2.AccessToken{access_token: "abc123"}
     client = %OAuth2.Client{site: endpoint_url(bypass.port), token: token}
     response_map = %{}
