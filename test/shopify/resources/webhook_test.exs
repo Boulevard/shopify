@@ -57,13 +57,13 @@ defmodule Shopify.WebhookTest do
 
   test "authenticate_callback verifies a valid HMAC" do
     hmac = "/2hfo50LspPpum1bqeWogzu5c5Ui6HuQ4ZxvtWxM9Vw="
-    {:ok, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body)
+    {:ok, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body())
     assert returned_digest == hmac
   end
 
   test "authenticate_callback/2 invalidates an invalid HMAC" do
     hmac = "6J11K6yc2NPxNNDeNHNnBNt1upPjKKAurDvB5v/iXjA="
-    {:error, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body)
+    {:error, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body())
     assert returned_digest != hmac
   end
 
