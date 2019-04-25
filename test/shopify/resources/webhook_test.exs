@@ -34,11 +34,6 @@ defmodule Shopify.WebhookTest do
   test "Webhook.delete destroys the webhook", %{bypass: bypass} do
     resource_module = Webhook
     resource_id = "1337"
-    resource_map = %{
-      "topic" => "customers/create",
-      "address" => "https://pen-island.com/callback",
-      "format" => "json",
-    }
     token = %OAuth2.AccessToken{access_token: "abc123"}
     client = %OAuth2.Client{site: endpoint_url(bypass.port), token: token}
     response_map = %{}
@@ -57,13 +52,13 @@ defmodule Shopify.WebhookTest do
 
   test "authenticate_callback verifies a valid HMAC" do
     hmac = "/2hfo50LspPpum1bqeWogzu5c5Ui6HuQ4ZxvtWxM9Vw="
-    {:ok, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body)
+    {:ok, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body())
     assert returned_digest == hmac
   end
 
   test "authenticate_callback/2 invalidates an invalid HMAC" do
     hmac = "6J11K6yc2NPxNNDeNHNnBNt1upPjKKAurDvB5v/iXjA="
-    {:error, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body)
+    {:error, returned_digest} = Shopify.Webhook.authenticate_callback(hmac, callback_body())
     assert returned_digest != hmac
   end
 
@@ -78,7 +73,7 @@ defmodule Shopify.WebhookTest do
 
   def callback_body do
     {:ok, body} = File.read("test/fixtures/callback_body.json")
-    body |> String.strip
+    body |> String.trim
   end
 
 end

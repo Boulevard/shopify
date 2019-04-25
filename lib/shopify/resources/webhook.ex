@@ -17,6 +17,6 @@ defmodule Shopify.Webhook do
   def compute_digest(data) do
     :crypto.hmac(:sha256, Config.get(:secret), data)
     |> Base.encode64
-    |> String.strip
+    |> String.trim
   end
 end
